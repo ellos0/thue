@@ -16,6 +16,8 @@ sudo make uninstall
 
 To compile WITHOUT installing:
 make bin/thue
+or
+make
 
 Thue grammar:
 original ::= replacement
