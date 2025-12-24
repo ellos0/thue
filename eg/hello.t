@@ -1,5 +1,3 @@
-__::=~Hello, World!
-
+_::=~Hello, World!
  ::= 
-
-__
+_
