@@ -6,7 +6,7 @@ bin/thue: src/thue.c
 	$(CC) $(CFLAGS) -o bin/thue src/thue.c
 
 install: bin/thue
-	cp bin/thue /usr/local/bin
+	sudo cp bin/thue /usr/local/bin
 
 uninstall: /usr/local/bin/thue
 	rm /usr/local/bin/thue
