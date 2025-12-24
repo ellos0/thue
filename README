@@ -1,0 +1,9 @@
+thue
+-
+
+My version of the esoteric Thue programming language.
+
+Current grammar:
+original ::= replacement
+original ::= ~output
+original ::= ::: - replaces original with stdin string
