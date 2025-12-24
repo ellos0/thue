@@ -7,3 +7,6 @@ all: src/thue.c
 
 install: bin/thue
 	cp bin/thue /usr/local/bin
+
+clean:
+	rm -rf bin
