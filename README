@@ -21,3 +21,9 @@ Thue grammar:
 original ::= replacement
 original ::= ~output
 original ::= ::: - replaces original with stdin string
+
+New grammar and language features:
+# use this to comment
+
+#!/usr/bin/env thue - to allow the program to be ran as an executable
+
