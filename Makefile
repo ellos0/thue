@@ -1,12 +1,15 @@
 CC=gcc
-CFLAGS=-O2 -Wall -Wextra -o
+CFLAGS=-O2 -Wall -Wextra
 
-all: src/thue.c
+bin/thue: src/thue.c
 	mkdir -p bin
-	$(CC) $(CFLAGS) bin/thue src/thue.c
+	$(CC) $(CFLAGS) -o bin/thue src/thue.c
 
 install: bin/thue
 	cp bin/thue /usr/local/bin
+
+uninstall: /usr/local/bin/thue
+	rm /usr/local/bin/thue
 
 clean:
 	rm -rf bin
