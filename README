@@ -4,12 +4,10 @@ thue
 My version of the esoteric Thue programming language.
 
 To install:
-sudo make install
+make install
 
 Clean repo:
 sudo make clean
-or
-make clean
 
 To uninstall
 sudo make uninstall
