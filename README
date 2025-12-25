@@ -7,10 +7,10 @@ To install:
 make install
 
 Clean repo:
-sudo make clean
+make clean
 
-To uninstall
-sudo make uninstall
+To uninstall:
+make uninstall
 
 To compile WITHOUT installing:
 make bin/thue
@@ -27,3 +27,16 @@ New grammar and language features:
 
 #!/usr/bin/env thue - to allow the program to be ran as an executable
 
+How to use:
+
+install (make install)
+
+thue <filename> (-d | -r | -l)
+
+You can also precursor your Thue files with something along the lines of:
+#!/usr/bin/env thue
+
+This allows you to run your files as an executable. Of course you can do this using:
+./thue-program.t
+
+These files can also be ran using the thue command.
