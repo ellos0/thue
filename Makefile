@@ -9,7 +9,7 @@ install: bin/thue
 	sudo cp bin/thue /usr/local/bin
 
 uninstall: /usr/local/bin/thue
-	rm /usr/local/bin/thue
+	sudo rm /usr/local/bin/thue
 
 clean:
 	rm -rf bin
