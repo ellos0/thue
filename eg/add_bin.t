@@ -1,16 +1,16 @@
 #::=# Thue program to add two binary numbers.
 #::=# by Frédéric van der Plancke 2000, public domain.
 #::=# 
-#::=# Should work regardless of rule execution order.
-#::=# format:
-#::=#   BEFORE: _digitsoffirstnumber_+_digitsofsecondnumber_
-#::=#   AFTER:  _digitsofsum_
-#::=# warning:
-#::=#   adding more than two binary numbers at once won't work.
-#::=# 
-#::=# Sorry, no comments; I think figuring how this works is
-#::=# an interesting challenge... (a not too difficult one, IMHO.)
-#::=# Have fun !
+# Should work regardless of rule execution order.
+# format:
+#   BEFORE: _digitsoffirstnumber_+_digitsofsecondnumber_
+#   AFTER:  _digitsofsum_
+# warning:
+#   adding more than two binary numbers at once won't work.
+# 
+# Sorry, no comments; I think figuring how this works is
+# an interesting challenge... (a not too difficult one, IMHO.)
+# Have fun !
 
 _+_::=<+|+>
 
@@ -55,11 +55,9 @@ _|<@::=_
 _0C::=_
 _1C::=_1
 
+# replace next line by whatever you want;
+# e.g. you can replace a number with ':::' to
+# read it from stdin.
+
 ::=
-
-
-#::=#-------- replace next line by whatever you want;
-#::=#         e.g. you can replace a number with ':::' to
-#::=#         read it from stdin.
-
-_111100_+_10010_
+_100_+_011_
