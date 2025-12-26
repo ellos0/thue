@@ -1,43 +1,9 @@
-/* $Header: C:\\UTILS\\CVS\\ROOT/programs\\lang\\thue/thue.c,v 1.4 2000/09/02 16:46:29 John Colagioia Exp $
- *
- * Recent Changes:
- *
- * $Log: thue.c,v $
- * Revision 1.5  2010/12/18           Chris Pressey
- * Fix off-by-one error in sort routine, reported by
- * Nathan Thern.  Fix another off-by-one error in
- * random number generation.  Modernize: use rand()
- * and rename getline() to avoid name conflict.
- *
- * Revision 1.4  2000/09/02 16:46:29  John Colagioia
- * Trivial bugfix.
- *
- * Revision 1.2  2000/02/29 21:51:24  John Colagioia
- *
- * Just added some basic header info in the comments.
- *
- *
- */
-
-/* For want of a nail,
-   the shoe was lost.
-   For want of a shoe,
-   the horse was lost.
-   For want of a horse,
-   the knight was lost.
-   For want of a knight,
-   the battle was lost.
-   So it was a kingdom was lost,
-   all for the want of a nail.
-   -- George Herbert, Jacula Prudentum
-   (Colloqual Adaptation)
-*/
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <time.h>
+#include <unistd.h>
 
 #define	CODE_SEPERATOR  "::="
 #define CODE_OUTPUT     '~'
@@ -63,6 +29,7 @@ typedef enum {
   NO_INPUT_ERROR,
   ENDING_ERROR,
   FILE_EOF_ERROR,
+  NO_ARGUMENTS_ERROR,
 } ThueError;
 
 char* say_error(ThueError e) {
@@ -71,13 +38,24 @@ char* say_error(ThueError e) {
   case SYNTAX_ERROR:return "Syntax Error. Perhaps a misplaced seperator?";
   case ENDING_ERROR:return "Ended file improperly. Make sure to add a seperator and operating string?";
   case FILE_EOF_ERROR:return "File does not exist";
+  case NO_ARGUMENTS_ERROR:return "You have to pass an argument.";
   }
 }
 
 void exit_with_error(ThueError e) {
-  printf("%s\n", say_error(e));
+  fprintf(stderr, "%s\n", say_error(e));
   exit(1); //not sure if this is memory safe
 }
+
+void output_file() {
+  FILE* fptr = fopen("a.out", "wb");
+  if (fptr) {
+    fputs(dataspace, fptr);
+    fclose(fptr);
+  } else {
+    fprintf(stderr, "Error opening output file. Try running without -o?");
+  }
+} 
 
 char * get_line (FILE * infile)
 {
@@ -107,8 +85,10 @@ int main (int argc, char *argv[])
     order,
     temp,
     rnum[64];
-  FILE	*infile;
+  FILE	*infile = NULL;
 
+  //memory management
+  //forgive me
   srand(time(0));
   dataspace = malloc(16384);
   tempspace = malloc(16384);
@@ -119,32 +99,35 @@ int main (int argc, char *argv[])
   target[0] = dataspace;
   memset (rulebase, 0, sizeof (rulebase));
   memset (dataspace, 0, sizeof (dataspace));
-  if (argc > 1) {
-    infile = fopen (argv[1], "r");
-  } else {
-    infile = stdin;
-  }
-  if (infile == NULL) {
-    return 1;
+  //argument processing
+  order = 0;
+  int opt;
+  while ((opt=getopt(argc,argv, "rldo")) != -1) {
+    switch (opt) {
+    case 'r': //right to left processing
+      order = 2;
+      break;
+    case 'l': //left to right processing
+      order = 1;
+      break;
+    case 'd': //debug
+      debug = 1;
+      break;
+    case 'o': //output
+      atexit(output_file);
+      break;
+    }
   }
 
-  order = 0;
-  if (argc < 2) {
-    exit_with_error(NO_INPUT_ERROR);
+  if (argc > 1) {
+    infile = fopen (argv[argc-1], "r");
+  } else {
+    exit_with_error(NO_ARGUMENTS_ERROR);
   }
-  if (argc > 2)
-    switch (argv[2][0])
-      {
-      case 'r':	/* Right-to-Left Processing */
-        order = 2;
-        break;
-      case 'l':	/* Left-to-Right */
-        order = 1;
-        break;
-      case 'd':
-        debug = 1;
-        break;
-      }
+  if (infile == NULL) {
+    fprintf(stderr, "Could not open file: %s\n", argv[argc-1]);
+    return 1;
+  }
 
   /* Get input file */
   state = 0;
@@ -266,11 +249,20 @@ int main (int argc, char *argv[])
       /* Apply the rule */
       sprintf (tempspace, "%s%s%s", dataspace, i?tempstr:rulebase[temp].rhs, c);
       strcpy (dataspace, tempspace);
-      if (debug)
-        puts (dataspace);
+      
+      if (debug) {
+        puts(dataspace);
+      }
     }
-
-  if (debug)
+    
+  if (debug) {
     printf ("Final:  \"%s\"\n", dataspace);
+  }
+  fclose(infile);
+  //why was this so horribly written?
+  //it can't be that hard to be a decent c programmer.
+  
+  free(dataspace);
+  free(tempspace);
   return (0);
 }
