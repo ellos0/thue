@@ -31,7 +31,12 @@ How to use:
 
 install (make install)
 
-thue <filename> (-d | -r | -l)
+thue (-d | -r | -l | -o) <filename>
+
+-d = debug
+-r = right to left evaluation
+-l = left to right evaluation
+-o = output (to a.out file)
 
 You can also precursor your Thue files with something along the lines of:
 #!/usr/bin/env thue
